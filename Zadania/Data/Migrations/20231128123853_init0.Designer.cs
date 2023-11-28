@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zadania.Data;
 
@@ -11,9 +12,10 @@ using Zadania.Data;
 namespace Zadania.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231128123853_init0")]
+    partial class init0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,48 +283,11 @@ namespace Zadania.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UczenUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("UczenId");
 
                     b.HasIndex("KlasaId");
 
-                    b.HasIndex("UczenUserId");
-
                     b.ToTable("Uczen");
-                });
-
-            modelBuilder.Entity("Zadania.Models.UczenZadanie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Tresc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tytul")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UczenId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ZadanieId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UczenId");
-
-                    b.HasIndex("ZadanieId");
-
-                    b.ToTable("UczenZadanie");
                 });
 
             modelBuilder.Entity("Zadania.Models.Zadanie", b =>
@@ -333,7 +298,7 @@ namespace Zadania.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ZadanieId"), 1L, 1);
 
-                    b.Property<bool>("CzyMoznaWyslacPoTerminie")
+                    b.Property<bool>("CzyWyslanePoTerminie")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("DataWaznosci")
@@ -422,30 +387,7 @@ namespace Zadania.Data.Migrations
                         .WithMany("Uczen")
                         .HasForeignKey("KlasaId");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "UczenUser")
-                        .WithMany()
-                        .HasForeignKey("UczenUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Klasa");
-
-                    b.Navigation("UczenUser");
-                });
-
-            modelBuilder.Entity("Zadania.Models.UczenZadanie", b =>
-                {
-                    b.HasOne("Zadania.Models.Uczen", "Uczen")
-                        .WithMany("UczenZadanie")
-                        .HasForeignKey("UczenId");
-
-                    b.HasOne("Zadania.Models.Zadanie", "Zadanie")
-                        .WithMany("UczenZadanie")
-                        .HasForeignKey("ZadanieId");
-
-                    b.Navigation("Uczen");
-
-                    b.Navigation("Zadanie");
                 });
 
             modelBuilder.Entity("Zadania.Models.Zadanie", b =>
@@ -475,16 +417,6 @@ namespace Zadania.Data.Migrations
             modelBuilder.Entity("Zadania.Models.Nauczyciel", b =>
                 {
                     b.Navigation("Zadanie");
-                });
-
-            modelBuilder.Entity("Zadania.Models.Uczen", b =>
-                {
-                    b.Navigation("UczenZadanie");
-                });
-
-            modelBuilder.Entity("Zadania.Models.Zadanie", b =>
-                {
-                    b.Navigation("UczenZadanie");
                 });
 #pragma warning restore 612, 618
         }
