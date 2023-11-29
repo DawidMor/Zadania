@@ -14,5 +14,6 @@ namespace Zadania.Data
         public DbSet<Zadania.Models.Nauczyciel>? Nauczyciel { get; set; }
         public DbSet<Zadania.Models.Uczen>? Uczen { get; set; }
         public DbSet<Zadania.Models.Zadanie>? Zadanie { get; set; }
+        public DbSet<Zadania.Models.UczenZadanie>? UczenZadanie { get; set; }
     }
 }
