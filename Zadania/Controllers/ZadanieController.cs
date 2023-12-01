@@ -7,25 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Zadania.Data;
 using Zadania.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Zadania.Controllers
 {
     public class ZadanieController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ZadanieController(ApplicationDbContext context)
+        public ZadanieController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Zadanie
         public async Task<IActionResult> Index()
         {
+            var  uczen = await _userManager.GetUserAsync(HttpContext.User);
+
             var applicationDbContext = _context.Zadanie.Include(z => z.Klasa).Include(z => z.Nauczyciel);
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> Indexzadanie()
+        {
+            var uczen = await _userManager.GetUserAsync(HttpContext.User);
 
+            var applicationDbContext = _context.Zadanie.Include(z => z.Klasa).Include(z => z.Nauczyciel);
+            return View(await applicationDbContext.ToListAsync());
+        }
         // GET: Zadanie/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,8 +60,8 @@ namespace Zadania.Controllers
         // GET: Zadanie/Create
         public IActionResult Create()
         {
-            ViewData["KlasaId"] = new SelectList(_context.Klasa, "KlasaId", "KlasaId");
-            ViewData["NauczycielId"] = new SelectList(_context.Nauczyciel, "NauczycielId", "NauczycielId");
+            ViewData["KlasaId"] = new SelectList(_context.Klasa, "KlasaId", "NazwaKlasy");
+            ViewData["NauczycielId"] = new SelectList(_context.Nauczyciel, "NauczycielId", "Nazwisko");
             return View();
         }
 
